@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conversa.Application.Common;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,16 @@ namespace Conversa.Application.Features.Commands.User.Register
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommandRequest, RegisterUserCommandResponse>
     {
-        public Task<RegisterUserCommandResponse> Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
+        private readonly IIdentityService _identityService;
+
+        public RegisterUserCommandHandler(IIdentityService identityService)
         {
-            throw new NotImplementedException();
+            _identityService = identityService;
+        }
+
+        public async Task<RegisterUserCommandResponse> Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
+        {
+            return await _identityService.RegisterAsync(request.Email, request.UserName, request.Password);
         }
     }
 }

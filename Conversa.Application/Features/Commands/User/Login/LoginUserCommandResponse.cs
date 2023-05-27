@@ -8,5 +8,6 @@ namespace Conversa.Application.Features.Commands.User.Login
 {
     public class LoginUserCommandResponse
     {
+        public bool IsSuccess { get; set; }
     }
 }

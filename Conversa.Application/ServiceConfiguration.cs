@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conversa.Application.Common;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

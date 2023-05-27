@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conversa.Application.Common;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,16 @@ namespace Conversa.Application.Features.Commands.User.Login
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
-        public Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
+        private readonly IIdentityService _identityService;
+
+        public LoginUserCommandHandler(IIdentityService identityService)
         {
-            throw new NotImplementedException();
+            _identityService = identityService;
+        }
+
+        public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
+        {
+            return await _identityService.LoginAsync(request.Email, request.Password);
         }
     }
 }
