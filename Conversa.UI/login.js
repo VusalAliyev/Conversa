@@ -3,24 +3,30 @@ $(document).ready(() => {
         e.preventDefault();
 
 
-        var form = $(this);
-        var formData = JSON.stringify({
-            "email": form.find('input[name="Email"]').val(),
-            "password": form.find('input[name="Password"]').val()
-          });
+        var formData = {
+          email: $('#email').val(),
+          password: $('#password').val()
+        };
+        console.log(formData);
         // var formData = form.serialize();
 
         $.ajax({
             type: "POST",
             url: 'http://localhost:5096/api/Account/login',
-            data: formData,
+            data: JSON.stringify(formData),
             contentType: "application/json",
             success: function(response) {
-              console.log("response");
+              console.log(response);
+              if (response.isSuccess) {
+                window.location.href = 'index.html';
+              }
+              else{
+                window.location.href = 'auth-login.html';
+              }
             },
             error: function(error) {
               // Hata durumunda yapılacak işlemler
-              console.log("error");
+              console.log(error);
             }
           });
     })
