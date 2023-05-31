@@ -1,5 +1,7 @@
-﻿using Conversa.Application.Features.Commands.User.Login;
+﻿using Conversa.Application.Common;
+using Conversa.Application.Features.Commands.User.Login;
 using Conversa.Application.Features.Commands.User.Register;
+using Conversa.Application.Features.Queries.User.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +14,17 @@ namespace Conversa.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IMediator _mediator;
-
-        public AccountController(IMediator mediator)
+        private readonly IIdentityService _identityService;
+        public AccountController(IMediator mediator, IIdentityService identityService)
         {
             _mediator = mediator;
+            _identityService = identityService;
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUser([FromQuery] GetProfileDetailsQueryRequest requestModel)
+        {
+            GetProfileDetailsQueryResponse getProfileDetailsQueryResponse = await _mediator.Send(requestModel);
+            return Ok(getProfileDetailsQueryResponse);
         }
 
         [HttpPost("login")]
@@ -29,6 +38,13 @@ namespace Conversa.API.Controllers
         {
             RegisterUserCommandResponse registerUserCommandResponse = await _mediator.Send(requestModel);
             return Ok(registerUserCommandResponse);
+        }
+        [HttpPost("logout")]
+
+        public async Task<IActionResult> Logout()
+        {
+            await _identityService.LogoutAsync();
+            return NoContent();
         }
 
     }

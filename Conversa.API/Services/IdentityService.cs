@@ -31,12 +31,17 @@ namespace Conversa.API.Services
                 return new LoginUserCommandResponse { IsSuccess = false };
                 //BadRequest("that email account has been blocked");
             }
-            if (!signInResult.Succeeded)
+            if (!signInResult.Succeeded)    
             {
                 return new LoginUserCommandResponse { IsSuccess = false };
                 //BadRequest("invalid email or password");
             }
             return new LoginUserCommandResponse { IsSuccess = true };
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
 
         public  async Task<RegisterUserCommandResponse> RegisterAsync(string email, string username, string password)
@@ -49,6 +54,7 @@ namespace Conversa.API.Services
 
             await _userManager.CreateAsync(user, password);
 
+            
             //await _userManager.AddToRoleAsync(user, "User");
             await _signInManager.SignInAsync(user, false);
             return new RegisterUserCommandResponse { IsSuccess=true};

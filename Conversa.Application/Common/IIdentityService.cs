@@ -12,5 +12,6 @@ namespace Conversa.Application.Common
     {
         Task<RegisterUserCommandResponse> RegisterAsync(string email, string username, string password);
         Task<LoginUserCommandResponse> LoginAsync(string email, string password);
+        Task LogoutAsync();
     }
 }
