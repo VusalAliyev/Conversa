@@ -20,6 +20,7 @@ namespace Conversa.Hubs
         }
         public async Task SendMessageAsync(string message,string clientName)
         {
+            Client sender =  ClientSource.Clients.FirstOrDefault(c=>c.ConnectionId==Context.ConnectionId);
             if (clientName==null)
             {
                 await Clients.Others.SendAsync("receiveMessage", message);
@@ -27,7 +28,7 @@ namespace Conversa.Hubs
             else
             {
                 Client client = ClientSource.Clients.FirstOrDefault(c => c.NickName == clientName);
-                await Clients.Client(client.ConnectionId).SendAsync("receiveMessage", message);
+                await Clients.Client(client.ConnectionId).SendAsync("receiveMessage", message,sender);
             }
         }
     }

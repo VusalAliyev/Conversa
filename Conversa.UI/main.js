@@ -4,6 +4,8 @@ $(document).ready(() => {
       .withAutomaticReconnect([1000, 1000, 2000])
       .build();
 
+      let clientName;
+
       async function start() {
         try {
           await connection.start();
@@ -25,17 +27,22 @@ $(document).ready(() => {
           }, 2000);
         })
       });
-      connection.on("allClients",(clients)=>{
+      connection.on("allClients", (clients) => {
         $("#clients").empty();
         clients.forEach(client => {
           console.log(client);
-          var yeniClient=$(`<li>${client.nickName}</li>`);
-          $("#clients").append(yeniClient)
+          var yeniClient = $(`<li>${client.nickName}</li>`);
+          $("#clients").append(yeniClient);
+          yeniClient.click(() => {
+            clientName = yeniClient.html(); // Seçilen <li> öğesinin içeriğini clientName'e atadık
+            console.log(clientName);
+          });
         });
-      })
+      });
       
 
       start();
+      
       $("#btnSend").click(()=>{
         let message=$("#txtMessage").val();
         connection.invoke("SendMessageAsync",message).catch(error=>alert(`Mesaj göndərərkən xəta baş verdi.`))
@@ -44,15 +51,17 @@ $(document).ready(() => {
 
       })
       
-      connection.on("receiveMessage",message=>{
-        $("#messages").append(message,"<br>")
+      connection.on("receiveMessage",(message,sender)=>{
+        var yeniMesaj = $(`<li>${message}</li>`);
+        $("#messages").append("from:",sender.nickName,"",yeniMesaj,"<br>")
       })
 
-      $("#btnSendMessage").click(()=>{
-         var clientName;
-        const message=$("#inputSendMessage");
-        connection.invoke("SendMessageAsync",message,)
-      })
+      $("#btnSendMessage").click(() => {
+        const message = $("#inputSendMessage").val();
+        if (clientName) { // Eğer clientName değeri tanımlıysa
+          connection.invoke("SendMessageAsync", message, clientName); // clientName'i ile birlikte mesajı gönder
+        }
+      });
     });
 
 
