@@ -1,3 +1,4 @@
+using Conversa.API.Hubs;
 using Conversa.API.Services;
 using Conversa.Application;
 using Conversa.Application.Common;
@@ -52,6 +53,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("AllowAll");
+ 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub");
+});
 
 app.MapControllers();
 

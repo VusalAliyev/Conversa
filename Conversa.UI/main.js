@@ -1,6 +1,6 @@
 $(document).ready(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7101/myhub")
+      .withUrl("https://localhost:7101/chathub")
       .withAutomaticReconnect([1000, 1000, 2000])
       .build();
 
@@ -12,49 +12,85 @@ $(document).ready(() => {
         }
       }
 
-      const status=$("#status");
-
-      connection.onreconnecting(error=>{
-        status.css("background-color","yellow");
-        status.css("color","white");
-        status.html("Reconnecting...");
-        status.fadeIn(2000,()=>{
+      $("#btnGiris").click(()=>{
+        console.log("salam");
+        const nickName=$("#inputGiris").val();
+        connection.invoke("GetNickname",nickName).catch(error=>console.log(error));
+      })
+      connection.on("clientJoined",(nickName)=>{
+        $("#status").html(`${nickName} giris etdi`)
+        $("#status").fadeIn(2000,()=>{
           setTimeout(() => {
-            status.fadeOut(2000)
+            $("#status").fadeOut(2000);
           }, 2000);
-        });
+        })
       });
-
-      connection.onreconnected(connectionId=>{
-        status.css("background-color","blue");
-        status.css("color","white");
-        status.html("Reconnected...");
-        status.fadeIn(2000,()=>{
-          setTimeout(() => {
-            status.fadeOut(2000)
-          }, 2000);
+      connection.on("allClients",(clients)=>{
+        $("#clients").empty();
+        clients.forEach(client => {
+          console.log(client);
+          var yeniClient=$(`<li>${client.nickName}</li>`);
+          $("#clients").append(yeniClient)
         });
-      });
-
-      connection.onreconnecting(connectionId=>{
-        status.css("background-color","red");
-        status.css("color","white");
-        status.html("Something was wrong...");
-        status.fadeIn(2000,()=>{
-          setTimeout(() => {
-            status.fadeOut(2000)
-          }, 2000);
-        });
-      });
-
+      })
+      
 
       start();
       $("#btnSend").click(()=>{
         let message=$("#txtMessage").val();
         connection.invoke("SendMessageAsync",message).catch(error=>alert(`Mesaj göndərərkən xəta baş verdi.`))
       })
+      $("btnSendMessage").click(()=>{
 
+      })
+      
       connection.on("receiveMessage",message=>{
         $("#messages").append(message,"<br>")
       })
-  });
+
+      $("#btnSendMessage").click(()=>{
+         var clientName;
+        const message=$("#inputSendMessage");
+        connection.invoke("SendMessageAsync",message,)
+      })
+    });
+
+
+
+
+
+
+    // const status=$("#status");
+
+    // connection.onreconnecting(error=>{
+    //   status.css("background-color","yellow");
+    //   status.css("color","white");
+    //   status.html("Reconnecting...");
+    //   status.fadeIn(2000,()=>{
+    //     setTimeout(() => {
+    //       status.fadeOut(2000)
+    //     }, 2000);
+    //   });
+    // });
+
+    // connection.onreconnected(connectionId=>{
+    //   status.css("background-color","blue");
+    //   status.css("color","white");
+    //   status.html("Reconnected...");
+    //   status.fadeIn(2000,()=>{
+    //     setTimeout(() => {
+    //       status.fadeOut(2000)
+    //     }, 2000);
+    //   });
+    // });
+
+    // connection.onreconnecting(connectionId=>{
+    //   status.css("background-color","red");
+    //   status.css("color","white");
+    //   status.html("Something was wrong...");
+    //   status.fadeIn(2000,()=>{
+    //     setTimeout(() => {
+    //       status.fadeOut(2000)
+    //     }, 2000);
+    //   });
+    // });

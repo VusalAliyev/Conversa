@@ -31,6 +31,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<MyHub>("/myhub");
     endpoints.MapHub<MessageHub>("/messageHub");
+    endpoints.MapHub<ChatHub>("/chathub");
 });
 
 app.UseAuthorization();

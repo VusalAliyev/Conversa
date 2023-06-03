@@ -12,6 +12,9 @@ $(document).ready(() => {
 
         $.ajax({
             type: "POST",
+            xhrFields: {
+              withCredentials: true
+          },
             url: 'http://localhost:5096/api/Account/login',
             data: JSON.stringify(formData),
             contentType: "application/json",

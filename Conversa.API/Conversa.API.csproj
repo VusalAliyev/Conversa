@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Conversa.Application\Conversa.Application.csproj" />
+    <ProjectReference Include="..\Conversa.Domain\Conversa.Domain.csproj" />
     <ProjectReference Include="..\Conversa.Infrastructure\Conversa.Infrastructure.csproj" />
   </ItemGroup>
 
