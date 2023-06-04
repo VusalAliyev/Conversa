@@ -52,8 +52,8 @@ $(document).ready(() => {
       })
       
       connection.on("receiveMessage",(message,sender)=>{
-        var yeniMesaj = $(`<li>${message}</li>`);
-        $("#messages").append("from:",sender.nickName,"",yeniMesaj,"<br>")
+        var yeniMesaj = $(`<li><strong>${sender.nickName}:</strong> ${message}</li>`);
+  $("#messages").append(yeniMesaj);
       })
 
       $("#btnSendMessage").click(() => {
@@ -62,6 +62,17 @@ $(document).ready(() => {
           connection.invoke("SendMessageAsync", message, clientName); // clientName'i ile birlikte mesajı gönder
         }
       });
+
+      $("#btnCreateGroup").click(()=>{
+        connection.invoke("AddGroup",$("#inputCreateGroup").val())
+      })
+
+      connection.on("groups",(groups)=>{
+        groups.forEach(group => {
+          var yeniGroup=$(`<li> ${group.groupName}</li>`)
+          $("#groups").append(yeniGroup);
+        });
+      })
     });
 
 

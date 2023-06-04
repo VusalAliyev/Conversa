@@ -28,8 +28,16 @@ namespace Conversa.Hubs
             else
             {
                 Client client = ClientSource.Clients.FirstOrDefault(c => c.NickName == clientName);
+                await Clients.Client(Context.ConnectionId).SendAsync("receiveMessage", message, sender);
                 await Clients.Client(client.ConnectionId).SendAsync("receiveMessage", message,sender);
             }
+        }
+        public async Task AddGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId,groupName);
+            GroupSource.Groups.Add(new Group { GroupName= groupName });
+
+            await Clients.All.SendAsync("groups", GroupSource.Groups);
         }
     }
 }
