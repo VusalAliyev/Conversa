@@ -36,7 +36,7 @@ namespace Conversa.API.Services
                 return new LoginUserCommandResponse { IsSuccess = false };
                 //BadRequest("invalid email or password");
             }
-            return new LoginUserCommandResponse { IsSuccess = true };
+            return new LoginUserCommandResponse { IsSuccess = true, Username=user.UserName};
         }
 
         public async Task LogoutAsync()

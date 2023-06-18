@@ -1,8 +1,9 @@
-using Conversa.API.Hubs;
+﻿using Conversa.API.Hubs;
 using Conversa.API.Services;
 using Conversa.Application;
 using Conversa.Application.Common;
 using Conversa.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,11 +22,25 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        builder.AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials();
     });
+
 });
+
+
+   builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+           .AddCookie(options =>
+           {
+               // add an instance of the patched manager to the options:
+               options.CookieManager = new ChunkingCookieManager();
+
+               options.Cookie.HttpOnly = true;
+               options.Cookie.SameSite = SameSiteMode.None;
+               options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+           });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(identityOptions =>
 {
@@ -54,10 +69,10 @@ app.UseAuthorization();
 
 app.UseCors("AllowAll");
  
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<ChatHub>("/chathub");
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<ChatHub>("/chathub");
+//});
 
 app.MapControllers();
 

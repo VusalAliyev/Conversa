@@ -26,7 +26,7 @@ namespace Conversa.API.Controllers
             GetProfileDetailsQueryResponse getProfileDetailsQueryResponse = await _mediator.Send(requestModel);
             return Ok(getProfileDetailsQueryResponse);
         }
-
+        
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest requestModel)
         {
