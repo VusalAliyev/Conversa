@@ -29,7 +29,7 @@ namespace Conversa.API.Controllers
         
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest requestModel)
-        {
+            {
             LoginUserCommandResponse loginUserCommandResponse = await _mediator.Send(requestModel);
             return Ok(loginUserCommandResponse);
         }

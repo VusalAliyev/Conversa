@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'
 import '../assets/css/app.min.css'
 import '../assets/css/bootstrap.min.css'
 import '../assets/css/icons.min.css'
@@ -20,13 +21,19 @@ const Login = () => {
       Email: email,
       Password: password,
     };
-
-    const url = 'http://localhost:5096/api/Account/register';
-    axios
-      .post(url, data)
+    console.log(data);
+    const url = 'http://localhost:5096/api/Account/login';
+    axios.post(url, data)
       .then((result) => {
         alert(result.data);
         console.log(result.data);
+
+        if (result.data.IsSuccess) { // success propertysinin true olduğunu kontrol ediyoruz
+          history.push('/'); // Başarılıysa '/home' sayfasına yönlendiriyoruz
+        }
+        else{
+          history
+        }
       })
       .catch((error) => {
         alert(error);
@@ -40,8 +47,8 @@ const Login = () => {
           <div className="col-md-8 col-lg-6 col-xl-5">
             <div className="text-center mb-4">
               <a href="index.html" className="auth-logo mb-5 d-block">
-                <img src="assets/images/logo-dark.png" alt="" height="30" className="logo logo-dark" />
-                <img src="assets/images/logo-light.png" alt="" height="30" className="logo logo-light" />
+                <img src="../assets/images/logo-dark.png" alt="" height="30" className="logo logo-dark" />
+                <img src="../assets/images/logo-light.png" alt="" height="30" className="logo logo-light" />
               </a>
 
               <h4>Sign in</h4>

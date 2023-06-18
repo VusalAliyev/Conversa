@@ -35,7 +35,7 @@ const Register = () => {
             Password: password,
             ConfirmPassword: confirmPassword
         };
-
+        console.log(data);
         const url = 'http://localhost:5096/api/Account/register';
         axios.post(url, data)
             .then((result) => {
@@ -148,7 +148,7 @@ const Register = () => {
                         </div>
                         <div className="mt-5 text-center">
                             
-                            <p>Already have an account? <a href="/" className="fw-medium text-primary"> Login </a></p>
+                            <p>Already have an account? <a href="/login" className="fw-medium text-primary"> Login </a></p>
                             <p>© 2023 Conversa. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                         </div>
                     </div>
