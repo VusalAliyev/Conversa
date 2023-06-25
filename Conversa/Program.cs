@@ -1,4 +1,7 @@
+using Conversa;
 using Conversa.Hubs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,8 @@ AllowAnyHeader().
 AllowCredentials().
 SetIsOriginAllowed(origin => true)));
 builder.Services.AddSignalR();
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Server=localhost;Database=SignalRDB;Trusted_Connection=true;TrustServerCertificate=true;"));
+
 
 var app = builder.Build();
 
